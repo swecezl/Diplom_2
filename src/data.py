@@ -16,3 +16,4 @@ class ResponseTexts:
     error_unauthorised_user = '{"success":false,"message":"You should be authorised"}'
     error_empty_ingredients = '{"success":false,"message":"Ingredient ids must be provided"}'
     error_incorrect_ids = '{"success":false,"message":"One or more ids provided are incorrect"}'
+

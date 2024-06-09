@@ -1,8 +1,10 @@
 import requests
+import allure
 from faker import Faker
 from src.data import Endpoints, BASE_URL
 
 
+@allure.step("Создание нового пользователя")
 def register_new_user_and_return_data():
     login_pass = []
 
@@ -19,3 +21,4 @@ def register_new_user_and_return_data():
         login_pass.append(user_data.get("name"))
 
     return login_pass, response
+

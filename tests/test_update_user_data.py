@@ -12,16 +12,15 @@ class TestUpdateUserData:
     @pytest.mark.parametrize('new_user_data',
                              [f'{{"name": "{fake.first_name()}"}}', f'{{"email": "{fake.free_email()}"}}'])
     @allure.title("Изменение данных пользователя с хедером авторизации")
-    def test_update_authorized_user_data(self, create_new_user_return_response, new_user_data):
-        new_user = create_new_user_return_response
-        access_token = new_user.json()["accessToken"]
+    def test_update_authorized_user_data(self, create_user_and_return_data, new_user_data):
+        login, data = create_user_and_return_data
+        access_token = data.json()["accessToken"]
         payload = new_user_data
         response = requests.patch(f'{BASE_URL}{Endpoints.user_path}', data=payload,
                                   headers={'Authorization': f'{access_token}'})
         email = response.json()["user"]["email"]
         name = response.json()["user"]["name"]
-        assert response.status_code == 200
-        assert response.text == f'{{"success":true,"user":{{"email":"{email}","name":"{name}"}}}}'
+        assert response.status_code == 200 and response.text == f'{{"success":true,"user":{{"email":"{email}","name":"{name}"}}}}'
 
     @pytest.mark.parametrize('new_user_data',
                              [f'{{"name": "{fake.first_name()}"}}', f'{{"email": "{fake.email()}"}}'])
@@ -29,5 +28,4 @@ class TestUpdateUserData:
     def test_update_unauthorized_user_data(self, new_user_data):
         payload = new_user_data
         response = requests.patch(f'{BASE_URL}{Endpoints.user_path}', data=payload)
-        assert response.status_code == 401
-        assert response.text == ResponseTexts.error_unauthorised_user
+        assert response.status_code == 401 and response.text == ResponseTexts.error_unauthorised_user
